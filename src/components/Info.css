@@ -1,0 +1,132 @@
+.about-section {
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #444;
+}
+
+.about-section h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.image-about {
+  background: url("./images/about1.jpg") center center/cover no-repeat;
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+  object-fit: contain;
+  text-align: center;
+}
+
+.image-about h1 {
+  color: #e4d9cc;
+  font-size: 40px;
+}
+
+.about-section {
+  background: url("./images/marble.avif") center center/cover no-repeat;
+  height: auto;
+  width: 100%;
+  display: flex; /*
+    flex-direction: column;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0);
+    object-fit: contain;
+    justify-content: space-between; 
+    margin: 20px 0;
+     object-fit: contain;*/
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.onama-section {
+  width: 50%;
+  padding: 50px;
+}
+
+.onama-section img {
+  width: 90%;
+}
+
+.onama-text {
+  flex: 1;
+}
+
+.onama-section h1 {
+  padding-bottom: 40px;
+}
+
+.onama-image {
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+}
+
+.onama-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover; 
+  display: block; 
+  margin: 0 auto; 
+}
+
+@media screen and (max-width: 960px) {
+  .about-section {
+    height: auto;
+    padding-top: 60px;
+    text-align: center;
+  }
+
+  .about-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .onama-section {
+    padding: 40px;
+    width: 100%;
+  }
+
+  .onama-section h1 {
+    font-size: 27px;
+  }
+
+  .onama-text,
+  .onama-image {
+    flex: none;
+    width: 100%;
+  }
+
+  .image-about {
+    height: 40vh;
+  }
+
+  .image-about h1 {
+    color: #e4d9cc;
+    font-size: 27px;
+  }
+}
