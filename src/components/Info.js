@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./Info.css";
+import "./Info_pocetna.css";
 import entranceImage from "./images/entrance.jpg";
 
 function Info() {
   return (
-
-    
     <div className="home-container">
       <div className="image-about">
         <h1>O nama</h1>
       </div>
-
       <div className="about-section">
         <div className="about-content">
           <div className="onama-section">
@@ -35,7 +32,7 @@ function Info() {
             </p>
           </div>
           <div className="onama-section">
-            <img src={entranceImage} alt="Salon" />
+            <img src={entranceImage} alt="Salon" className="kontakt-image-about"/>
           </div>
         </div>
       </div>
