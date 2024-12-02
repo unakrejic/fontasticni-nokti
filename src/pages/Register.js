@@ -1,8 +1,12 @@
 import React from "react";
 import "../App.css";
+import Kon from "../components/Kontakt";
 
 function Register() {
-   
-  }
-  
-  export default Register;
+  return (
+    <>
+      <Kon />
+    </>
+  );
+}
+export default Register;

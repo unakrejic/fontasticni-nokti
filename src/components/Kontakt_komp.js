@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Kontakt_komp.css";
 import nailskImage from "./images/manicure-tables-nail-spa.jpeg";
+import Button from "./Button";
 
 function Kontakt() {
   return (
@@ -16,6 +17,7 @@ function Kontakt() {
             Istraži svet profesionalne nege noktiju i opuštajućih masaža
             vrhunskim tehnikama i kvalitetnim proizvodima.
           </p>
+          <Button to="/registracija">Zakaži termin</Button>
         </div>
       </div>
     </div>
