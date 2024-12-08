@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Usluga from "./Usluga";
 import "./SveUsluge.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function UslugaMasaze() {
   const [usluge, setUsluge] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  /*
-
+  const handleBookNow = (id) => {
+    navigate(`/rezervacija/${id}`);
+  };
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/services");
-        setServices(response.data);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/rezervacije/usluge`
+        );
+        setUsluge(response.data);
       } catch (error) {
         console.error("Error fetching services:", error);
+        setError("Greska sa ucitavanjem usluga");
       } finally {
         setLoading(false);
       }
@@ -23,41 +31,29 @@ function UslugaMasaze() {
     fetchServices();
   }, []);
 
-  const handleBookNow = (serviceId) => {
-    console.log(`Service ${serviceId} booked!`);
-    // You can add booking logic here, e.g., redirect or API call.
-  };
-
-
-
-   key={usluga.id}
-              src={usluga.sliika}
-              name={usluga.naziv}
-              description={usluga.opis}
-              price={usluga.cena}
-              capacity={usluga.kapacitet}
-              onClick={() => handleBookNow(usluga.id)}
-   
-  */
 
   return (
     <div className="usluge">
-      <h1>Masaze</h1>
+      <h1>Masaže</h1>
       <div className="usluge_container">
-        {loading ? (
+      {loading ? (
           <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
         ) : usluge.length > 0 ? (
-          usluge.map((usluga) => (
-            <Usluga
-              key={1}
-              src={usluga.sliika}
-              name={"Masaza"}
-              description={"Lepi, jaki i zdravi prirodni nokti su osnova savršenog manikira."}
-              price={300}
-              capacity={5}
-              //onClick={() => handleBookNow(usluga.id)}
-            />
-          ))
+          usluge
+            .filter((usluga) => usluga.naziv.toLowerCase().includes("masaža"))
+            .map((usluga) => (
+              <Usluga
+                key={usluga.id}
+                src={`http://localhost:5075${usluga.slika}`}
+                naziv={usluga.naziv}
+                opis={usluga.opis}
+                cena={usluga.cena}
+                kapacitet={usluga.kapacitet}
+                onClick={() => handleBookNow(usluga.id)}
+              />
+            ))
         ) : (
           <p>Nema usluga</p>
         )}

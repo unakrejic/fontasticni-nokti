@@ -16,6 +16,7 @@ function UslugaNokti() {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/rezervacije/usluge`
         );
+        console.log("API Response:", response.data);
         setUsluge(response.data);
       } catch (error) {
         console.error("Error fetching services:", error);
@@ -41,17 +42,19 @@ function UslugaNokti() {
         ) : error ? (
           <p>{error}</p>
         ) : usluge.length > 0 ? (
-          usluge.map((usluga) => (
-            <Usluga
-              key={usluga.id}
-              src={usluga.slika}
-              naziv={usluga.naziv}
-              opis={usluga.opis}
-              cena={usluga.cena}
-              kapacitet={usluga.kapacitet}
-              onClick={() => handleBookNow(usluga.id)}
-            />
-          ))
+          usluge
+            .filter((usluga) => !usluga.naziv.toLowerCase().includes("masaža"))
+            .map((usluga) => (
+              <Usluga
+                key={usluga.id}
+                src={`http://localhost:5075${usluga.slika}`}
+                naziv={usluga.naziv}
+                opis={usluga.opis}
+                cena={usluga.cena}
+                kapacitet={usluga.kapacitet}
+                onClick={() => handleBookNow(usluga.id)}
+              />
+            ))
         ) : (
           <p>Nema usluga</p>
         )}

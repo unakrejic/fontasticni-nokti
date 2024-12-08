@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Kontakt.css";
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 function Kon() {
   const { id } = useParams();
+  const [usluge, setUsluge] = useState([]);
   const [action, setAction] = useState("Rezerviši");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -12,6 +14,7 @@ function Kon() {
   const [usluga, setUsluga] = useState("");
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [discountedPrice, setDiscountedPrice] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -19,15 +22,67 @@ function Kon() {
     setError("");
   };
 
+  
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/rezervacije/usluge`
+        );
+        console.log("API Response:", response.data);
+        setUsluge(response.data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+        setError("Greska sa ucitavanjem usluga");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
   const handlePromoCheck = async () => {
     setError("");
     setDiscountedPrice(null);
 
     if (!promo) {
-      setError("Molimo unesite promo kod.");
-      return;
+        setError("Molimo unesite promo kod.");
+        return;
     }
-  };
+
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/promokod?kod=${promo}`);
+        const promoKod = response.data;
+
+        if (!promoKod) {
+            setError("Promo kod nije pronađen.");
+            return;
+        }
+
+        if (!promoKod.Vazeci) {
+            setError("Promo kod nije važeći.");
+            return;
+        }
+
+        const selectedService = usluge.find(usluga => usluga.naziv === usluga);
+        if (!selectedService) {
+            setError("Molimo odaberite uslugu.");
+            return;
+        }
+
+        const originalPrice = selectedService.cena; 
+        const discountAmount = (originalPrice * promoKod.Popust) / 100;
+        const newPrice = originalPrice - discountAmount;
+
+        setDiscountedPrice(newPrice);
+
+    } catch (error) {
+        console.error("Greška prilikom provere promo koda:", error);
+        setError("Došlo je do greške prilikom provere promo koda.");
+    }
+};
+
 
   const handleActionChange = (newAction) => {
     setError("");
@@ -111,12 +166,12 @@ function Kon() {
                 <option value="" disabled>
                   Odaberite uslugu
                 </option>
-                <option value="manikir">Manikir</option>
-                <option value="pedikir">Pedikir</option>
-                <option value="gel">Gel nokti</option>
-                <option value="nadogradnja">Nadogradnja noktiju</option>
-                <option value="lakiranje">Lakiranje noktiju</option>
-              </select>
+                {usluge.map((usluga) => (
+                  <option key={usluga.id} value={usluga.naziv}>
+                    {usluga.naziv}
+                  </option>
+                ))}
+                  </select>
 
               <div className="input">
                 <i className="fa-solid fa-hashtag" />

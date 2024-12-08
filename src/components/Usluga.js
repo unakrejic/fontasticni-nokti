@@ -9,7 +9,7 @@ function Usluga({ src, naziv, opis, cena, kapacitet }) {
       <h3 className="usluga_naziv">{naziv}</h3>
       <p className="usluga_opis">{opis}</p>
       <div className="usluga_detalji">
-        <span className="usluga_cena">Cena: {cena}RSD</span>
+        <span className="usluga_cena">Cena: {cena} RSD</span>
         <span className="usluga_kapacitet">Kapacitet: {kapacitet}</span>
         <Button to="/registracija">Zakaži termin</Button>
       </div>
