@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./Kontakt.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Kon() {
+  const { id } = useParams();
   const [action, setAction] = useState("Rezerviši");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");

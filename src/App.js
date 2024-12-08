@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Nokti from "./pages/Nokti";
 import Masaze from "./pages/Masaze";
 import MadeRez from "./pages/MadeRez";
+import Kon from "../src/components/Kontakt";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registracija" element={<Register />} />
+        <Route path="/rezervacija/:id" element={<Kon />} />
         <Route path="/nokti" element={<Nokti />} />
         <Route path="/masaze" element={<Masaze />} />
         <Route path="/rez" element={<MadeRez />} />

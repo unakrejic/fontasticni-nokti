@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Usluga from "./Usluga";
 import "./SveUsluge.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function UslugaNokti() {
   const [usluge, setUsluge] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  /*
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/services");
-        setServices(response.data);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/rezervacije/usluge`
+        );
+        setUsluge(response.data);
       } catch (error) {
         console.error("Error fetching services:", error);
+        setError("Greska sa ucitavanjem usluga");
       } finally {
         setLoading(false);
       }
@@ -23,22 +28,9 @@ function UslugaNokti() {
     fetchServices();
   }, []);
 
-  const handleBookNow = (serviceId) => {
-    console.log(`Service ${serviceId} booked!`);
-    // You can add booking logic here, e.g., redirect or API call.
+  const handleBookNow = (id) => {
+    navigate(`/rezervacija/${id}`);
   };
-
-
-
-   key={usluga.id}
-              src={usluga.sliika}
-              name={usluga.naziv}
-              description={usluga.opis}
-              price={usluga.cena}
-              capacity={usluga.kapacitet}
-              onClick={() => handleBookNow(usluga.id)}
-   
-  */
 
   return (
     <div className="usluge">
@@ -46,16 +38,18 @@ function UslugaNokti() {
       <div className="usluge_container">
         {loading ? (
           <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
         ) : usluge.length > 0 ? (
           usluge.map((usluga) => (
             <Usluga
-              key={1}
-              src={usluga.sliika}
-              name={"Manikir"}
-              description={"Lepi, jaki i zdravi prirodni nokti su osnova savršenog manikira."}
-              price={300}
-              capacity={5}
-              //onClick={() => handleBookNow(usluga.id)}
+              key={usluga.id}
+              src={usluga.slika}
+              naziv={usluga.naziv}
+              opis={usluga.opis}
+              cena={usluga.cena}
+              kapacitet={usluga.kapacitet}
+              onClick={() => handleBookNow(usluga.id)}
             />
           ))
         ) : (

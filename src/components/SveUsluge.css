@@ -1,4 +1,4 @@
-.usluge {
+/*.usluge {
     padding: 20px;
     text-align: center;
   }
@@ -47,6 +47,66 @@
   .usluga_kapacitet {
     font-size: 14px;
     color: #333;
+  }
+  */
+  .usluge {
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Elementi se raspoređuju jedan ispod drugog */
+    gap: 20px; /* Razmak između usluga */
+  }
+  
+  .usluge_container {
+    display: flex;
+    flex-direction: column; /* Postavlja svaku uslugu u novi red */
+    gap: 15px; /* Razmak između usluga */
+  }
+  
+  .usluga {
+    display: flex;
+    flex-direction: column; /* Unutrašnji elementi se takođe slažu vertikalno */
+    align-items: center; /* Centriranje sadržaja po sredini */
+    border: 1px solid #ccc; /* Opcionalno - okvir za svaku uslugu */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lagana senka */
+    background-color: #f9f9f9; /* Pozadinska boja */
+  }
+  
+  .usluga_img {
+    width: 100%;
+    max-width: 300px; /* Maksimalna širina slike */
+    height: auto; /* Proporcionalno skaliranje */
+    margin-bottom: 10px;
+  }
+  
+  .usluga_naziv {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .usluga_opis {
+    font-size: 1em;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .usluga_detalji {
+    display: flex;
+    flex-direction: flex; 
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+  }
+  
+  .usluga_detalji span {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  
+  .usluga_detalji Button {
+    margin-top: 10px;
   }
   
 
