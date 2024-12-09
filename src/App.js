@@ -8,6 +8,7 @@ import Nokti from "./pages/Nokti";
 import Masaze from "./pages/Masaze";
 import MadeRez from "./pages/MadeRez";
 import Kon from "../src/components/Kontakt";
+import Rez from "../src/components/Rez";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/nokti" element={<Nokti />} />
         <Route path="/masaze" element={<Masaze />} />
         <Route path="/rez" element={<MadeRez />} />
+        <Route path="/napravljenarez" element={<Rez />} />
       </Routes>
       <Footer />
     </Router>

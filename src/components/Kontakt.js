@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Kontakt.css";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 
 function Kon() {
@@ -14,15 +16,136 @@ function Kon() {
   const [usluga, setUsluga] = useState("");
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [datumVreme, setDatumVreme] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [discountedPrice, setDiscountedPrice] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (action === "Rezerviši") {
+      const currentDateTime = new Date();
+      if (datumVreme <= currentDateTime) {
+        setError("Datum i vreme moraju biti u budućnosti.");
+        return;
+      }
+
+      const roundedDate = new Date(datumVreme);
+      roundedDate.setMinutes(0, 0, 0);
+      if (datumVreme.getMinutes() !== 0) {
+        setError("Vreme mora biti zaokruženo na celo vreme (npr. 11:00).");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/rezervacije/musterija?email=${email}`
+        );
+        let musterija = response.data;
+        console.log("Customer data:", musterija);
+
+        if (!musterija) {
+          console.log("Customer not found, creating a new customer...");
+          const newMusterija = {
+            Email: email,
+            ImePrezime: username,
+          };
+
+          const createResponse = await axios.post(
+            `${process.env.REACT_APP_API_URL}/rezervacije/musterija`,
+            newMusterija
+          );
+
+          musterija = createResponse.data;
+          console.log("New customer created:", musterija);
+        }
+
+        const selectedService = usluge.find((item) => item.naziv === usluga);
+        console.log("Selected service:", selectedService);
+        if (!selectedService) {
+          setError("Molimo odaberite uslugu.");
+          return;
+        }
+
+        const newReservation = {
+          IDmusterije: musterija.id,
+          Broj: selectedService.broj,
+          DatumVreme: datumVreme,
+          Poruka: poruka,
+        };
+
+        if (promo != null) {
+          console.log("Checking promo code:", promo);
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/rezervacije/promokod?Kod=${promo}`
+          );
+          const promoKod = response.data;
+          console.log("Promo code data:", promoKod);
+          newReservation.IskoriscenKodID = promoKod.id;
+        }
+
+        if (discountedPrice !== null) {
+          newReservation.UkupnaCena = discountedPrice;
+        } else {
+          newReservation.UkupnaCena = selectedService.cena;
+        }
+
+        console.log("Sending reservation data:", newReservation);
+        const reservationResponse = await axios.post(
+          `${process.env.REACT_APP_API_URL}/rezervacije`,
+          newReservation
+        );
+
+        console.log(
+          "Reservation created successfully:",
+          reservationResponse.data
+        );
+
+        setError("");
+        setEmail("");
+        setUsername("");
+        setPoruka("");
+        setPromo("");
+        setToken("");
+        setDiscountedPrice(null);
+
+        navigate("/napravljenarez", {
+          state: { reservation: reservationResponse.data.rezervacija },
+        });
+      } catch (error) {
+        console.error("Greška prilikom rezervacije:", error);
+        setError("Došlo je do greške prilikom pravljenja rezervacije.");
+      }
+    } else if (action === "Pronadji rezervaciju") {
+     
+      if (!token || !email || !username) {
+        setError("Molimo unesite sve podatke.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/rezervacije/rezervacija?email=${email}&token=${token}`
+        );
+
+        if (response.status === 200) {
+          const reservation = response.data.rezervacija;
+
+          navigate("/napravljenarez", {
+            state: { reservation},
+          });
+        } else {
+          setError("Rezervacija nije pronađena za uneti email i token.");
+        }
+      } catch (error) {
+        console.error("Greška prilikom pronalaženja rezervacije:", error);
+        setError("Došlo je do greške prilikom traženja rezervacije.");
+      }
+    }
   };
 
-  
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -47,42 +170,57 @@ function Kon() {
     setDiscountedPrice(null);
 
     if (!promo) {
-        setError("Molimo unesite promo kod.");
-        return;
+      setError("Molimo unesite promo kod.");
+      return;
+    }
+
+    const selectedService = usluge.find((item) => item.naziv === usluga);
+    if (!selectedService) {
+      setError("Molimo odaberite uslugu.");
+      return;
     }
 
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/promokod?kod=${promo}`);
-        const promoKod = response.data;
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/rezervacije/promokod?Kod=${promo}`
+      );
+      const promoKod = response.data;
+      console.log(promoKod);
 
-        if (!promoKod) {
-            setError("Promo kod nije pronađen.");
-            return;
-        }
+      if (!promoKod) {
+        setError("Promo kod nije pronađen.");
+        return;
+      }
 
-        if (!promoKod.Vazeci) {
-            setError("Promo kod nije važeći.");
-            return;
-        }
+      if (promoKod.vazeci == false) {
+        setError("Promo kod nije važeći.");
+        return;
+      }
 
-        const selectedService = usluge.find(usluga => usluga.naziv === usluga);
-        if (!selectedService) {
-            setError("Molimo odaberite uslugu.");
-            return;
-        }
+      const originalPrice = parseFloat(selectedService.cena);
+      if (isNaN(originalPrice)) {
+        setError("Cena usluge nije važeća.");
+        return;
+      }
 
-        const originalPrice = selectedService.cena; 
-        const discountAmount = (originalPrice * promoKod.Popust) / 100;
-        const newPrice = originalPrice - discountAmount;
+      console.log("Promo kod Popust:", promoKod.popust);
+      const discount = parseInt(promoKod.popust, 10);
+      if (isNaN(discount)) {
+        setError("Popust nije važeći.");
+        return;
+      }
 
-        setDiscountedPrice(newPrice);
+      console.log("Original price:", originalPrice);
+      console.log("Discount:", discount);
+      const newPrice = (originalPrice * (100 - discount)) / 100;
+      console.log(newPrice);
 
+      setDiscountedPrice(newPrice);
     } catch (error) {
-        console.error("Greška prilikom provere promo koda:", error);
-        setError("Došlo je do greške prilikom provere promo koda.");
+      console.error("Greška prilikom provere promo koda:", error);
+      setError("Došlo je do greške prilikom provere promo koda.");
     }
-};
-
+  };
 
   const handleActionChange = (newAction) => {
     setError("");
@@ -171,7 +309,23 @@ function Kon() {
                     {usluga.naziv}
                   </option>
                 ))}
-                  </select>
+              </select>
+
+              <div className="input">
+                <i className="fa-solid fa-calendar"></i>
+                <DatePicker
+                  selected={datumVreme}
+                  onChange={(date) => setDatumVreme(date)}
+                  showTimeSelect
+                  timeIntervals={60}
+                  timeCaption="Vreme"
+                  dateFormat="Pp"
+                  minTime={new Date(new Date().setHours(9, 0, 0, 0))}
+                  maxTime={new Date(new Date().setHours(20, 0, 0, 0))}
+                  className="datetime-input"
+                  placeholderText="Izaberite datum i vreme"
+                />
+              </div>
 
               <div className="input">
                 <i className="fa-solid fa-hashtag" />
