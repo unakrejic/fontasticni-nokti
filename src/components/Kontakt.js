@@ -26,6 +26,10 @@ function Kon() {
     setError("");
 
     if (action === "Rezerviši") {
+      if (!token || !email || !username || !datumVreme) {
+        setError("Niste popunili sva neophodna polja");
+        return;
+      }
       const currentDateTime = new Date();
       if (datumVreme <= currentDateTime) {
         setError("Datum i vreme moraju biti u budućnosti.");
@@ -40,13 +44,36 @@ function Kon() {
       }
 
       try {
+        const selectedService = usluge.find((item) => item.naziv === usluga);
+        console.log("Selected service:", selectedService);
+        if (!selectedService) {
+          setError("Molimo odaberite uslugu.");
+          return;
+        }
+        //////////////
+        const broj = selectedService.broj;
+
+        const kap = await axios.post(
+          `${process.env.REACT_APP_API_URL}/rezervacije/provera`,
+          {
+            broj,
+            datumVreme,
+          }
+        );
+        const { available, message } = kap.data;
+
+        if (!available) {
+          alert(message);
+          return;
+        }
+        ///////////////
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/rezervacije/musterija?email=${email}`
         );
         let musterija = response.data;
         console.log("Customer data:", musterija);
 
-        if (!musterija) {
+        if (musterija.message == "Musterija nije pronađena.") {
           console.log("Customer not found, creating a new customer...");
           const newMusterija = {
             Email: email,
@@ -62,13 +89,6 @@ function Kon() {
           console.log("New customer created:", musterija);
         }
 
-        const selectedService = usluge.find((item) => item.naziv === usluga);
-        console.log("Selected service:", selectedService);
-        if (!selectedService) {
-          setError("Molimo odaberite uslugu.");
-          return;
-        }
-
         const newReservation = {
           IDmusterije: musterija.id,
           Broj: selectedService.broj,
@@ -76,7 +96,7 @@ function Kon() {
           Poruka: poruka,
         };
 
-        if (promo != null) {
+        if (promo !== "") {
           console.log("Checking promo code:", promo);
           const response = await axios.get(
             `${process.env.REACT_APP_API_URL}/rezervacije/promokod?Kod=${promo}`
@@ -103,6 +123,8 @@ function Kon() {
           reservationResponse.data
         );
 
+        alert("Uspešno kreirana rezervacija");
+
         setError("");
         setEmail("");
         setUsername("");
@@ -110,7 +132,7 @@ function Kon() {
         setPromo("");
         setToken("");
         setDiscountedPrice(null);
-
+        /////////////////////////////////////////
         navigate("/napravljenarez", {
           state: { reservation: reservationResponse.data.rezervacija },
         });
@@ -119,8 +141,7 @@ function Kon() {
         setError("Došlo je do greške prilikom pravljenja rezervacije.");
       }
     } else if (action === "Pronadji rezervaciju") {
-     
-      if (!token || !email || !username) {
+      if (!token || !email) {
         setError("Molimo unesite sve podatke.");
         return;
       }
@@ -132,9 +153,9 @@ function Kon() {
 
         if (response.status === 200) {
           const reservation = response.data.rezervacija;
-
+          //////////////////////////////
           navigate("/napravljenarez", {
-            state: { reservation},
+            state: { reservation },
           });
         } else {
           setError("Rezervacija nije pronađena za uneti email i token.");
@@ -259,20 +280,22 @@ function Kon() {
             }
             onClick={() => handleActionChange("Rezerviši")}
           >
-            Rezerviši
+            Napravi rezervaciju
           </div>
         </div>
 
         <div className="inputs">
-          <div className="input">
-            <i className="fas fa-user" />
-            <input
-              type="text"
-              placeholder="Unesite ime"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+          {action == "Rezerviši" && (
+            <div className="input">
+              <i className="fas fa-user" />
+              <input
+                type="text"
+                placeholder="Unesite ime"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          )}
           <div className="input">
             <i className="fas fa-envelope" />
             <input

@@ -68,6 +68,7 @@
 
 .onama-section img {
   width: 90%;
+  margin-left: 0px;
 }
 
 .onama-text {
@@ -108,6 +109,12 @@
   .onama-section {
     padding: 40px;
     width: 100%;
+   
+  }
+
+  .onama-section img {
+    width: 100%;
+    margin-left: 0px;
   }
 
   .onama-section h1 {
@@ -118,6 +125,7 @@
   .onama-image {
     flex: none;
     width: 100%;
+    padding: 0px;
   }
 
   .image-about {
@@ -128,4 +136,5 @@
     color: #e4d9cc;
     font-size: 27px;
   }
+
 }

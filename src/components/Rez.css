@@ -1,0 +1,70 @@
+.reservation-details {
+  background: url("./images/marble.avif") center center/cover no-repeat;
+  height: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  text-align: left;
+  justify-content: left;
+  flex-wrap: wrap;
+  align-items: center; 
+}
+
+.reservation-details h1 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.reservation-details .details p {
+  font-size: 16px;
+  margin: 10px 0;
+  color: #555;
+}
+
+.reservation-details .details strong {
+  color: #222;
+}
+
+.reservation-details .buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .reservation-details .buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .reservation-details .buttons .cancel-btn {
+    background-color: #ff5500; 
+    color: white;
+  }
+  
+  .reservation-details .buttons .cancel-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+  }
+  
+  .reservation-details .buttons .leave-btn {
+    background-color: #b99262;
+    color: white;
+  }
+  
+  .reservation-details .buttons .leave-btn:hover {
+    background-color: #885d29; 
+    transform: scale(1.05);
+  }
+  
+  .reservation-details .buttons button:active {
+    transform: scale(0.95);
+  }
+  
+

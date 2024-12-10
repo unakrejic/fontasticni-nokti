@@ -113,7 +113,6 @@
 }
 
 
-
 select.input {
   height: 60px;
   width: 480px;
@@ -215,4 +214,32 @@ form {
     padding-top: 0px;
     padding-right: 0px;
   }
+
+  .input label {
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .input input {
+    font-size: 16px;
+  }
+
+  .submit-button {
+    width: 150px;
+    font-size: 16px;
+    height: 50px;
+  }
+
+  select.input {
+    font-size: 16px;
+  }
+
+  select.input option {
+    font-size: 16px;
+  }
+
+  .input,
+.checkbox-input {
+  padding: 5px;
+}
+
 }

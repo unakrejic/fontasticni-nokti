@@ -73,14 +73,14 @@
 .usluga_detalji Button {
   margin-top: 10px;
 }
-
+/*
 .usluga:nth-child(odd) .usluga_img {
   order: 1; 
 }
 
 .usluga:nth-child(even) .usluga_img {
   order: -1; 
-}
+}*/
 
 
 @media (max-width: 960px) {

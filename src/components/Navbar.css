@@ -116,7 +116,7 @@
       top: 80px;
       left: 0;
       text-align: center;
-      background: #fff;
+      background: #b99262;
     }
   
     .nav-item {
@@ -132,14 +132,16 @@
     .nav-links {
       font-size: 25px;
       text-align: center;
-      ;
+      background-color: #fff;
+      border-radius: 6px;
     }
   
     .nav-links:hover {
-      background-color: #b99262;
+      background-color: #885d29;
       color: #fff;
       border-radius: 0;
       padding-left: 2 rem;
+      border-radius: 6px;
     }
     
     .menu-icon {
@@ -162,16 +164,16 @@
       text-decoration: none;
       font-size: 1.5rem;
       background-color: transparent;
-      color: #b99262;
+      color: #fff;
       padding: 20px 20px;
-      border: 1px solid #b99262;
+      border: 1px solid #fff;
       transition: all 0.3s ease-out;
       
     }
   
     .nav-links-mobile:hover {
-      background: #b99262;
-      color: #fff;
+      background: #fff;
+      color: #b99262;
       transition: 250ms;
     }
   
