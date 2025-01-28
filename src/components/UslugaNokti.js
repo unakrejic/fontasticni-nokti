@@ -30,6 +30,7 @@ function UslugaNokti() {
   }, []);
 
   const handleBookNow = (id) => {
+    console.log("Booking ID:", id);
     navigate(`/rezervacija/${id}`);
   };
 
@@ -64,3 +65,5 @@ function UslugaNokti() {
 }
 
 export default UslugaNokti;
+
+//id={usluga.id}

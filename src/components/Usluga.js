@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./Button"; 
 
-function Usluga({ src, naziv, opis, cena, kapacitet }) {
+function Usluga({src, naziv, opis, cena, kapacitet  }) {
     
     return (
     <div className="usluga">
@@ -18,3 +18,5 @@ function Usluga({ src, naziv, opis, cena, kapacitet }) {
 }
 
 export default Usluga;
+//<Button onClick={() => onClick(id)}>Zakaži termin</Button>
+//

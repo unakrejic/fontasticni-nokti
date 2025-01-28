@@ -43,7 +43,7 @@ function Rez() {
           setPromogen(generisankod.data);
           console.log(promogen);
         } catch (error) {
-          console.error("Error fetching reservation details:", error);
+          console.error("Ne moze da se prikaze rezervacija", error);
         }
       }
     };

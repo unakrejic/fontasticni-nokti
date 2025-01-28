@@ -16,8 +16,8 @@ function Kon() {
   const [usluga, setUsluga] = useState("");
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading]=useState(null);
   const [datumVreme, setDatumVreme] = useState(new Date());
-  const [loading, setLoading] = useState(true);
   const [discountedPrice, setDiscountedPrice] = useState(null);
   const navigate = useNavigate();
 
@@ -170,11 +170,20 @@ function Kon() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
+        console.log(id);
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/rezervacije/usluge`
         );
         console.log("API Response:", response.data);
         setUsluge(response.data);
+
+        if (id) {
+          const serviceResponse = await axios.get(
+            `${process.env.REACT_APP_API_URL}/rezervacije/usluga/${id}`
+          );
+          setUsluga(serviceResponse.data);
+          console.log(usluga);
+        }
       } catch (error) {
         console.error("Error fetching services:", error);
         setError("Greska sa ucitavanjem usluga");
@@ -239,7 +248,7 @@ function Kon() {
       setDiscountedPrice(newPrice);
     } catch (error) {
       console.error("Greška prilikom provere promo koda:", error);
-      setError("Došlo je do greške prilikom provere promo koda.");
+      setError("Došlo je do greške prilikom izračunavanju cene");
     }
   };
 
